@@ -8,11 +8,13 @@
 //  Use of this SDK is subject to the Stripe Terminal Terms:
 //  https://stripe.com/terminal/legal
 //
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- The possible methods for discovering a reader.
+ The possible methods for discovering a reader. Pass a variant of this enum
+ into your `SCPDiscoveryConfiguration`.
 
  @see https://stripe.com/docs/terminal/readers/connecting
  */
@@ -47,8 +49,11 @@ typedef NS_ENUM(NSUInteger, SCPDiscoveryMethod) {
      a second time with an updated reader object, populated with additional
      info about the device, like its battery level.
 
-     @note The Bluetooth Proximity discovery method can only discovery Chipper
-     2X BT readers.
+     @note The Bluetooth Proximity discovery method can only discover
+     Stripe Reader M2 and BBPOS Chipper 2X BT readers.
+
+     @note The simulated Bluetooth Proximity discovery method will always return
+     a Stripe Reader M2 simulated device.
      */
     SCPDiscoveryMethodBluetoothProximity,
 
@@ -68,6 +73,19 @@ typedef NS_ENUM(NSUInteger, SCPDiscoveryMethod) {
      @see https://stripe.com/docs/api/terminal/readers/list
      */
     SCPDiscoveryMethodInternet,
+
+    /**
+     The Local Mobile discovery method searches for any readers built into the
+     merchant device that are supported by Stripe Terminal.
+     When discovering a reader with this method `didUpdateDiscoveredReaders`
+     will only be called once with a list of discovered readers, if any.
+     An error may be provided if a discovery attempt is made in an
+     on a device without hardware support for the Apple Built-In reader or
+     one running an unsupported version of iOS.
+
+     @see https://stripe.com/docs/terminal/payments/setup-reader/tap-on-mobile-ios
+     */
+    SCPDiscoveryMethodLocalMobile,
 } NS_SWIFT_NAME(DiscoveryMethod);
 
 NS_ASSUME_NONNULL_END

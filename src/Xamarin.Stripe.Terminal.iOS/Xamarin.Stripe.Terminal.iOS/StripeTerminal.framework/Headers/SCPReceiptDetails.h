@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SCPJSONDecodable.h"
+#import <StripeTerminal/SCPJSONDecodable.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  @see https://stripe.com/docs/api/charges/object#charge_object-payment_method_details-card_present-receipt
  */
 NS_SWIFT_NAME(ReceiptDetails)
-@interface SCPReceiptDetails : NSObject <SCPJSONDecodable>
+@interface SCPReceiptDetails : NSObject <SCPJSONDecodable, NSCopying>
 
 /**
  The type of account being debited or credited
@@ -37,6 +37,11 @@ NS_SWIFT_NAME(ReceiptDetails)
  Also known as "AID". Required on EMV receipts.
  */
 @property (nonatomic, readonly) NSString *dedicatedFileName;
+
+/**
+ Identifier for this transaction
+ */
+@property (nonatomic, nullable, readonly) NSString *authorizationCode;
 
 /**
  Authorization Response Code

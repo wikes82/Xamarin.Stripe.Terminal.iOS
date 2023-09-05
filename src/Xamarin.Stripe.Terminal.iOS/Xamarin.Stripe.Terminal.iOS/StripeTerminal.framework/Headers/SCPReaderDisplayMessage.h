@@ -14,7 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- The display messages that a reader may request be displayed by your app.
+ The display messages that a reader may request be displayed by your app. Used by `[SCPBluetoothReaderDelegate reader:didRequestReaderDisplayMessage:]`.
  */
 typedef NS_ENUM(NSUInteger, SCPReaderDisplayMessage) {
     /**
@@ -51,6 +51,10 @@ typedef NS_ENUM(NSUInteger, SCPReaderDisplayMessage) {
      The card is invalid. Try another card.
      */
     SCPReaderDisplayMessageTryAnotherCard,
+    /**
+     Card removed too early, try again.
+     */
+    SCPReaderDisplayMessageCardRemovedTooEarly,
 } NS_SWIFT_NAME(ReaderDisplayMessage);
 
 NS_ASSUME_NONNULL_END

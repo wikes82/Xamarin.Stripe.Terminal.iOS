@@ -10,11 +10,28 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <StripeTerminal/SCPPaymentMethodOptionsParameters.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Parameters for creating an `SCPPaymentIntent`.
+ @abstract Controls when the funds will be captured from the customer’s account.
+
+ @see https://stripe.com/docs/terminal/payments/collect-payment?terminal-sdk-platform=ios#capture-payment
+ */
+typedef NS_ENUM(NSUInteger, SCPCaptureMethod) {
+    /// Place a hold on the funds when the customer authorizes the payment, but don’t
+    /// capture the funds until later. Will require an explicit call to capture payments.
+    /// (Not all payment methods support this.)
+    SCPCaptureMethodManual,
+
+    /// Stripe automatically captures funds when the customer authorizes the payment.
+    SCPCaptureMethodAutomatic,
+} NS_SWIFT_NAME(CaptureMethod);
+
+/**
+ Parameters for creating an `SCPPaymentIntent`. Pass an object of this type
+ into `Terminal.shared.createPaymentIntent()`.
 
  @see https://stripe.com/docs/api/payment_intents/create
  */
@@ -32,10 +49,23 @@ NS_SWIFT_NAME(PaymentIntentParameters)
 @property (nonatomic, readonly) NSString *currency;
 
 /**
+ The list of payment method types that this PaymentIntent is allowed to use.
+ The default is value for this is ["card_present"].
+ */
+@property (nonatomic, readonly) NSArray<NSString *> *paymentMethodTypes;
+
+/**
+ The capture method that this PaymentIntent should use. Defaults to `SCPCaptureMethodManual`.
+ */
+@property (nonatomic, readonly) SCPCaptureMethod captureMethod;
+
+/**
  Set of key-value pairs that you can attach to an object. This can be useful for
  storing additional information about the object in a structured format.
+
+ @see https://stripe.com/docs/api#metadata
  */
-@property (nonatomic, copy, nullable, readwrite) NSDictionary *metadata;
+@property (nonatomic, copy, nullable, readwrite) NSDictionary<NSString *, NSString *> *metadata;
 
 /**
  An arbitrary string attached to the object. If you send a receipt email for
@@ -52,6 +82,15 @@ NS_SWIFT_NAME(PaymentIntentParameters)
  display it incorrectly or not at all.
  */
 @property (nonatomic, copy, nullable, readwrite) NSString *statementDescriptor;
+
+/**
+ A string to specify details about the transaction so your customer can understand it clearly on their statement.
+ The suffix is concatenated with the `statementDescriptor`, the `*` symbol, and a space to form the complete statement
+ descriptor that your customer sees. Maximum 22 characters for the final concatenated descriptor.
+
+ @see https://stripe.com/docs/account/statement-descriptors
+ */
+@property (nonatomic, copy, nullable, readwrite) NSString *statementDescriptorSuffix;
 
 /**
  Email address that the receipt for the resulting payment will be sent to.
@@ -109,6 +148,28 @@ NS_SWIFT_NAME(PaymentIntentParameters)
 @property (nonatomic, copy, nullable, readwrite) NSString *onBehalfOf;
 
 /**
+ Indicates that you intend to make future payments with this PaymentIntent’s payment method.
+
+ Providing this parameter will attach the payment method to the PaymentIntent’s Customer,
+ after the PaymentIntent is confirmed and any required actions from the user are complete.
+ If no Customer was provided, the payment method can still be attached to a Customer after
+ the transaction completes.
+
+ Possible values:
+ "on_session": Use "on_session" if you intend to only reuse the payment method when your
+ customer is present in your checkout flow.
+ "off_session": Use "off_session" if your customer may or may not be present in your checkout flow.
+
+ @see https://stripe.com/docs/api/payment_intents/create#create_payment_intent-setup_future_usage
+ */
+@property (nonatomic, copy, nullable, readwrite) NSString *setupFutureUsage;
+
+/**
+ Specific options used during the creation of the PaymentMethod.
+ */
+@property (nonatomic, readwrite) SCPPaymentMethodOptionsParameters *paymentMethodOptionsParameters;
+
+/**
  Initializes SCPPaymentIntentParameters with the given parameters.
 
  @param amount      The amount of the payment, provided in the currency's
@@ -119,9 +180,78 @@ NS_SWIFT_NAME(PaymentIntentParameters)
  feature, see https://stripe.com/docs/terminal/testing#test-card
 
  @param currency    The currency of the payment.
+
+ This initializer will use the default paymentMethodTypes value: ["card_present"]
  */
 - (instancetype)initWithAmount:(NSUInteger)amount
                       currency:(NSString *)currency;
+
+/**
+ Initializes SCPPaymentIntentParameters with the given parameters.
+
+ @note In testmode, only amounts ending in "00" will be approved. All other
+ amounts will be declined by the Stripe API. For more information about this
+ feature, see https://stripe.com/docs/terminal/testing#test-card
+
+ @param amount      The amount of the payment, provided in the currency's
+ smallest unit.
+
+ @param currency    The currency of the payment.
+
+ @param paymentMethodTypes The payment method types allowed for this
+ payment. Currently allowed payment method types for a Terminal transaction are
+ "card_present" and "interac_present".
+ */
+- (instancetype)initWithAmount:(NSUInteger)amount
+                      currency:(NSString *)currency
+            paymentMethodTypes:(NSArray<NSString *> *)paymentMethodTypes;
+
+/**
+ Initializes SCPPaymentIntentParameters with the given parameters.
+
+ @note In testmode, only amounts ending in "00" will be approved. All other
+ amounts will be declined by the Stripe API. For more information about this
+ feature, see https://stripe.com/docs/terminal/testing#test-card
+
+ @param amount      The amount of the payment, provided in the currency's
+ smallest unit.
+
+ @param currency    The currency of the payment.
+
+ @param captureMethod The type of capture method used for this payment.
+ Passing in `SCPCaptureMethodAutomatic` will result in a capture occurring automatically
+ whereas `SCPCaptureMethodManual` will require an explicit call to capture payments
+ (see: https://stripe.com/docs/terminal/payments/collect-payment?terminal-sdk-platform=ios#capture-payment)
+ */
+- (instancetype)initWithAmount:(NSUInteger)amount
+                      currency:(NSString *)currency
+                 captureMethod:(SCPCaptureMethod)captureMethod;
+
+/**
+ Initializes SCPPaymentIntentParameters with the given parameters.
+
+ @note In testmode, only amounts ending in "00" will be approved. All other
+ amounts will be declined by the Stripe API. For more information about this
+ feature, see https://stripe.com/docs/terminal/testing#test-card
+
+ @param amount      The amount of the payment, provided in the currency's
+ smallest unit.
+
+ @param currency    The currency of the payment.
+
+ @param paymentMethodTypes The payment method types allowed for this
+ payment. Currently allowed payment method types for a Terminal transaction are
+ "card_present" and "interac_present".
+
+ @param captureMethod The type of capture method used for this payment.
+ Passing in `SCPCaptureMethodAutomatic` will result in a capture occuring automatically
+ whereas `SCPCaptureMethodManual` will require an explicit call to capture payments
+ (see: https://stripe.com/docs/terminal/payments/collect-payment?terminal-sdk-platform=ios#capture-payment)
+ */
+- (instancetype)initWithAmount:(NSUInteger)amount
+                      currency:(NSString *)currency
+            paymentMethodTypes:(NSArray<NSString *> *)paymentMethodTypes
+                 captureMethod:(SCPCaptureMethod)captureMethod;
 
 /**
  Use `initWithAmount:currency:`

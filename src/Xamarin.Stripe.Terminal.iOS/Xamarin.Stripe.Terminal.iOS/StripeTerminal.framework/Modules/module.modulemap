@@ -4,3 +4,8 @@ framework module StripeTerminal {
   export *
   module * { export * }
 }
+
+module StripeTerminal.Swift {
+  header "StripeTerminal-Swift.h"
+  requires objc
+}

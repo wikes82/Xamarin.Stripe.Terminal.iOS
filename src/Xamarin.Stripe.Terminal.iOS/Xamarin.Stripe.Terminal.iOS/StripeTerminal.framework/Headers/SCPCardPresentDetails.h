@@ -11,13 +11,36 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SCPCardBrand.h"
-#import "SCPCardFundingType.h"
-#import "SCPJSONDecodable.h"
+#import <StripeTerminal/SCPCardBrand.h>
+#import <StripeTerminal/SCPCardFundingType.h>
+#import <StripeTerminal/SCPJSONDecodable.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class SCPReceiptDetails;
+@class SCPReceiptDetails, SCPNetworks;
+
+/**
+ Represents the ability for a PaymentIntent to be incrementally authorized.
+
+ @see https://stripe.com/docs/terminal/features/incremental-authorizations
+ */
+typedef NS_ENUM(NSUInteger, SCPIncrementalAuthorizationStatus) {
+    /**
+     It is undetermined whether or not this `PaymentIntent` will be eligible for incremental authorizations.
+     You can only perform incremental authorizations on uncaptured payments after confirmation.
+     */
+    SCPIncrementalAuthorizationStatusUnknown,
+
+    /**
+     This PaymentIntent is not eligible for incremental authorizations, or it was not requested.
+     */
+    SCPIncrementalAuthorizationStatusNotSupported,
+
+    /**
+     This PaymentIntent is eligible for incremental authorizations.
+     */
+    SCPIncrementalAuthorizationStatusSupported,
+};
 
 /**
  An object representing details from a transaction using a card_present
@@ -85,6 +108,34 @@ NS_SWIFT_NAME(CardPresentDetails)
  */
 @property (nonatomic, nullable, readonly) NSString *emvAuthData;
 
+/**
+ Two-letter ISO code representing the country of the card. You could use this
+ attribute to get a sense of the international breakdown of cards you’ve collected.
+
+ Only available for interac_present payments.
+ */
+@property (nonatomic, copy, nullable, readonly) NSString *country;
+
+/**
+ EMV tag 5F2D. Preferred languages specified by the integrated circuit chip.
+
+ Only available for interac_present payments.
+ */
+@property (nonatomic, copy, nullable, readonly) NSArray<NSString *> *preferredLocales;
+
+/**
+ Contains information about card networks that can be used to process the payment.
+
+ Only available after collectPaymentMethod when using updatePaymentIntent on the CollectConfiguration.
+ */
+@property (nonatomic, copy, nullable, readonly) SCPNetworks *networks;
+
+/**
+ * Whether this payment method is eligible for incremental authorizations.
+ *
+ * Note: This is only known if the PaymentIntent was confirmed.
+ */
+@property (nonatomic, assign, readonly) SCPIncrementalAuthorizationStatus incrementalAuthorizationStatus;
 /**
  You cannot directly instantiate this class.
  */

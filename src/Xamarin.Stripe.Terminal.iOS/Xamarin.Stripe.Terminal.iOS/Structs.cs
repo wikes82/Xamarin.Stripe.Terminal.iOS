@@ -4,6 +4,15 @@ using ObjCRuntime;
 namespace StripeTerminal
 {
 	[Native]
+	public enum SCPBatteryStatus : ulong
+	{
+		Unknown,
+		Critical,
+		Low,
+		Nominal
+	}
+
+	[Native]
 	public enum SCPCardBrand : long
 	{
 		Visa,
@@ -12,6 +21,9 @@ namespace StripeTerminal
 		Discover,
 		Jcb,
 		DinersClub,
+		Interac,
+		UnionPay,
+		EftposAu,
 		Unknown
 	}
 
@@ -22,6 +34,14 @@ namespace StripeTerminal
 		Credit,
 		Prepaid,
 		Other
+	}
+
+	[Native]
+	public enum SCPIncrementalAuthorizationStatus : ulong
+	{
+		Unknown,
+		NotSupported,
+		Supported
 	}
 
 	[Native]
@@ -46,7 +66,15 @@ namespace StripeTerminal
 		Chipper2X,
 		VerifoneP400,
 		WisePad3,
-		WisePosE
+		StripeM2,
+		WisePosE,
+		WisePosEDevKit,
+		Etna,
+		Chipper1X,
+		WiseCube,
+		StripeS700,
+		StripeS700DevKit,
+		AppleBuiltIn
 	}
 
 	[Native]
@@ -54,7 +82,8 @@ namespace StripeTerminal
 	{
 		BluetoothScan,
 		BluetoothProximity,
-		Internet
+		Internet,
+		LocalMobile
 	}
 
 	[Native]
@@ -62,6 +91,26 @@ namespace StripeTerminal
 	{
 		None,
 		Verbose
+	}
+
+	[Native]
+	public enum SCPCardPresentCaptureMethod : ulong
+	{
+		SCPCardPresentCaptureMethodManualPreferred
+	}
+	
+	[Native]
+	public enum SCPCaptureMethod : ulong
+	{
+		Manual,
+		Automatic
+	}
+
+	[Native]
+	public enum SCPCardPresentRouting : ulong
+	{
+		Domestic,
+		International
 	}
 
 	[Native]
@@ -83,7 +132,8 @@ namespace StripeTerminal
 		RemoveCard,
 		MultipleContactlessCardsDetected,
 		TryAnotherReadMethod,
-		TryAnotherCard
+		TryAnotherCard,
+		CardRemovedTooEarly
 	}
 
 	[Flags]
@@ -108,10 +158,154 @@ namespace StripeTerminal
 	{
 		RequiresPaymentMethod,
 		RequiresConfirmation,
+		RequiresAction,
 		RequiresCapture,
 		Processing,
 		Canceled,
 		Succeeded
+	}
+
+	[Native]
+	public enum SCPSimulateReaderUpdate : ulong
+	{
+		Available = 0,
+		None,
+		Required,
+		LowBattery,
+		Random
+	}
+
+	[Native]
+	public enum SCPSetupIntentStatus : ulong
+	{
+		RequiresPaymentMethod,
+		RequiresConfirmation,
+		RequiresAction,
+		Processing,
+		Canceled,
+		Succeeded
+	}
+
+	[Native]
+	public enum SCPSetupIntentUsage : ulong
+	{
+		ffSession,
+		nSession
+	}
+
+	[Native]
+	public enum SCPSimulatedCardType : ulong
+	{
+		Visa = 0,
+		VisaDebit,
+		VisaUsCommonDebit,
+		Mastercard,
+		MasterDebit,
+		MastercardPrepaid,
+		Amex,
+		Amex2,
+		Discover,
+		Discover2,
+		Diners,
+		Diners14Digit,
+		Jcb,
+		UnionPay,
+		Interac,
+		EftposAuDebit,
+		EftposAuVisaDebit,
+		EftposAuDebitMastercard,
+		ChargeDeclined,
+		ChargeDeclinedInsufficientFunds,
+		ChargeDeclinedLostCard,
+		ChargeDeclinedStolenCard,
+		ChargeDeclinedExpiredCard,
+		ChargeDeclinedProcessingError,
+		RefundFailed,
+		OnlinePinCvm,
+		OnlinePinScaRetry,
+		OfflinePinCvm,
+		OfflinePinScaRetry
+	}
+
+	[Native]
+	public enum SCPAppleBuiltInReaderErrorCode : long
+	{
+		Unknown = 0,
+		UnexpectedNil = 1,
+		InvalidTransactionType = 2,
+		PasscodeDisabled = 3,
+		NotAllowed = 4,
+		BackgroundRequestNotAllowed = 5,
+		Unsupported = 6,
+		OsVersionNotSupported = 7,
+		ModelNotSupported = 8,
+		NetworkError = 9,
+		NetworkAuthenticationError = 10,
+		ServiceConnectionError = 11,
+		NotReady = 12,
+		EmptyReaderToken = 13,
+		InvalidReaderToken = 14,
+		PrepareFailed = 15,
+		PrepareExpired = 16,
+		TokenExpired = 17,
+		DeviceBanned = 18,
+		ReaderMemoryFull = 19,
+		ReaderBusy = 20,
+		AccountNotLinked = 21,
+		AccountLinkingFailed = 22,
+		AccountLinkingRequiresiCloudSignIn = 23,
+		AccountLinkingCancelled = 24,
+		AccountLinkingCheckFailed = 25,
+		MerchantBlocked = 26,
+		InvalidMerchant = 27,
+		ReadNotAllowed = 28,
+		ReadFromBackgroundError = 29,
+		ReaderServiceConnectionError = 30,
+		ReaderServiceError = 31,
+		NoReaderSession = 32,
+		ReaderSessionExpired = 33,
+		ReaderTokenExpired = 34,
+		ReaderSessionNetworkError = 35,
+		ReaderSessionAuthenticationError = 36,
+		ReaderSessionBusy = 37,
+		ReadCancelled = 38,
+		InvalidAmount = 39,
+		InvalidCurrency = 40,
+		NfcDisabled = 41,
+		ReadNotAllowedDuringCall = 42,
+		CardReadFailed = 43,
+		PaymentReadFailed = 44,
+		PaymentCardDeclined = 45,
+		InvalidPreferredAID = 46,
+		PinEntryFailed = 47,
+		PinTokenInvalid = 48,
+		PinEntryTimeout = 49,
+		PinCancelled = 50,
+		PinNotAllowed = 51
+	}
+
+	[Native]
+	public enum SCPAppleBuiltInReaderTransactionEventCode : long
+	{
+		Unknown = 0,
+		ReadyForTap = 1,
+		CardDetected = 2,
+		RemoveCard = 3,
+		Completed = 4,
+		Retry = 5,
+		ReadCanceled = 6,
+		ReadNotCompleted = 7,
+		PinEntryRequested = 8,
+		PinEntryCompleted = 9
+	}
+
+	[Native]
+	public enum SCPAppleBuiltInReaderTransactionType : long
+	{
+		Unknown = 0,
+		Purchase = 1,
+		Refund = 2,
+		Verification = 3
 	}
 
 	[Native]
@@ -124,35 +318,56 @@ namespace StripeTerminal
 		ConnectionTokenProviderCompletedWithNothing = 1510,
 		ProcessInvalidPaymentIntent = 1530,
 		NilPaymentIntent = 1540,
+		NilSetupIntent = 1542,
 		NilRefundPaymentMethod = 1550,
 		InvalidRefundParameters = 1555,
 		InvalidClientSecret = 1560,
 		MustBeDiscoveringToConnect = 1570,
 		CannotConnectToUndiscoveredReader = 1580,
 		InvalidDiscoveryConfiguration = 1590,
-		InvalidCart = 1600,
-		NilReaderDisplayDelegate = 1850,
-		NilUpdate = 1860,
+		InvalidReaderForUpdate = 1861,
 		UnsupportedSDK = 1870,
 		FeatureNotAvailableWithConnectedReader = 1880,
+		FeatureNotAvailable = 1890,
+		InvalidListLocationsLimitParameter = 1900,
+		BluetoothConnectionInvalidLocationIdParameter = 1910,
+		InvalidRequiredParameter = 1920,
+		ReaderConnectionConfigurationInvalid = 1940,
+		ReaderTippingParameterInvalid = 1950,
+		InvalidLocationIdParameter = 1960,
 		Canceled = 2020,
 		LocationServicesDisabled = 2200,
 		BluetoothDisabled = 2320,
+		BluetoothAccessDenied = 2321,
 		BluetoothScanTimedOut = 2330,
 		BluetoothLowEnergyUnsupported = 2340,
 		ReaderSoftwareUpdateFailedBatteryLow = 2650,
 		ReaderSoftwareUpdateFailedInterrupted = 2660,
+		ReaderSoftwareUpdateFailedExpiredUpdate = 2670,
+		BluetoothConnectionFailedBatteryCriticallyLow = 2680,
 		CardInsertNotRead = 2810,
 		CardSwipeNotRead = 2820,
 		CardReadTimedOut = 2830,
 		CardRemoved = 2840,
 		CardLeftInReader = 2850,
+		MissingEMVData = 2892,
+		CommandNotAllowed = 2900,
+		UnsupportedMobileDeviceConfiguration = 2910,
+		PasscodeNotEnabled = 2920,
+		CommandNotAllowedDuringCall = 2930,
+		InvalidAmount = 2940,
+		InvalidCurrency = 2950,
+		AppleBuiltInReaderTOSAcceptanceRequiresiCloudSignIn = 2960,
+		AppleBuiltInReaderTOSAcceptanceCanceled = 2970,
 		ReaderBusy = 3010,
 		IncompatibleReader = 3030,
 		ReaderCommunicationError = 3060,
+		NFCDisabled = 3100,
 		BluetoothError = 3200,
 		BluetoothConnectTimedOut = 3210,
 		BluetoothDisconnected = 3230,
+		BluetoothPeerRemovedPairingInformation = 3240,
+		BluetoothAlreadyPairedWithAnotherDevice = 3241,
 		ReaderSoftwareUpdateFailed = 3800,
 		ReaderSoftwareUpdateFailedReaderError = 3830,
 		ReaderSoftwareUpdateFailedServerError = 3840,
@@ -160,9 +375,19 @@ namespace StripeTerminal
 		UnknownReaderIpAddress = 3860,
 		InternetConnectTimeOut = 3870,
 		ConnectFailedReaderIsInUse = 3880,
+		BluetoothReconnectStarted = 3890,
+		ReaderNotAccessibleInBackground = 3900,
+		AppleBuiltInReaderFailedToPrepare = 3910,
+		AppleBuiltInReaderDeviceBanned = 3920,
+		AppleBuiltInReaderTOSNotYetAccepted = 3930,
+		AppleBuiltInReaderTOSAcceptanceFailed = 3940,
+		AppleBuiltInReaderMerchantBlocked = 3950,
+		AppleBuiltInReaderInvalidMerchant = 3960,
 		UnexpectedSdkError = 5000,
-		PaymentDeclinedByStripeAPI = 6000,
-		PaymentDeclinedByReader = 6500,
+		UnexpectedReaderError = 5001,
+		DeclinedByStripeAPI = 6000,
+		DeclinedByReader = 6500,
+		CommandRequiresCardholderConsent = 6700,
 		RefundFailed = 6800,
 		NotConnectedToInternet = 9000,
 		RequestTimedOut = 9010,
@@ -170,7 +395,16 @@ namespace StripeTerminal
 		StripeAPIResponseDecodingError = 9030,
 		InternalNetworkError = 9040,
 		ConnectionTokenProviderCompletedWithError = 9050,
+		ConnectionTokenProviderTimedOut = 9052,
 		SessionExpired = 9060
+	}
+
+	[Native]
+	public enum SCPLocationStatus : ulong
+	{
+		Unknown,
+		Set,
+		NotSet
 	}
 
 	[Native]
@@ -178,6 +412,7 @@ namespace StripeTerminal
 	{
 		Card,
 		CardPresent,
+		InteracPresent,
 		Unknown
 	}
 
@@ -186,6 +421,16 @@ namespace StripeTerminal
 	{
 		ffline,
 		nline
+	}
+
+	[Flags]
+	[Native]
+	public enum SCPUpdateComponent : ulong
+	{
+		Incremental = 1uL << 0,
+		Firmware = 1uL << 1,
+		Config = 1uL << 2,
+		Keys = 1uL << 3
 	}
 
 	[Native]

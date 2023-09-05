@@ -11,12 +11,12 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SCPJSONDecodable.h"
-#import "SCPPaymentMethodType.h"
+#import <StripeTerminal/SCPJSONDecodable.h>
+#import <StripeTerminal/SCPPaymentMethodType.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class SCPCardDetails;
+@class SCPCardDetails, SCPCardPresentDetails;
 
 /**
  PaymentMethod objects represent your customer's payment instruments.
@@ -51,6 +51,16 @@ NS_SWIFT_NAME(PaymentMethod)
 @property (nonatomic, nullable, readonly) SCPCardDetails *card;
 
 /**
+ If this is a card_present PaymentMethod (ie `self.type == SCPPaymentMethodTypeCardPresent`), this contains additional details.
+ */
+@property (nonatomic, nullable, readonly) SCPCardPresentDetails *cardPresent;
+
+/**
+ If this is an Interac_present PaymentMethod (ie `self.type == SCPPaymentMethodTypeInteracPresent`), this contains additional details.
+ */
+@property (nonatomic, nullable, readonly) SCPCardPresentDetails *interacPresent;
+
+/**
  The Customer that this PaymentMethod is attached to, or nil.
  */
 @property (nonatomic, nullable, readonly) NSString *customer;
@@ -66,6 +76,11 @@ NS_SWIFT_NAME(PaymentMethod)
  You cannot directly instantiate this class.
  */
 - (instancetype)init NS_UNAVAILABLE;
+
+/**
+ You cannot directly instantiate this class.
+ */
++ (instancetype)new NS_UNAVAILABLE;
 
 @end
 

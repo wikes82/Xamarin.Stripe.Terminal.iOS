@@ -9,8 +9,8 @@
 //  https://stripe.com/terminal/legal
 //
 
-#import "SCPPaymentIntent.h"
 #import <Foundation/Foundation.h>
+#import <StripeTerminal/SCPPaymentIntent.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,8 +40,12 @@ NS_SWIFT_NAME(RefundParameters)
 /**
  Set of key-value pairs that you can attach to an object. This can be useful for
  storing additional information about the object in a structured format.
+
+ @note The metadata property is not set when issuing refunds with the Verifone P400 reader.
+
+ @see https://stripe.com/docs/api#metadata
  */
-@property (nonatomic, copy, nullable, readwrite) NSDictionary *metadata;
+@property (nonatomic, copy, nullable, readwrite) NSDictionary<NSString *, NSString *> *metadata;
 
 /**
  Connect only: Nullable boolean indicating whether the transfer should be
