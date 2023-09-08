@@ -414,27 +414,27 @@ namespace StripeTerminal
         // @required -(void)localMobileReader:(SCPReader * _Nonnull)reader didStartInstallingUpdate:(SCPReaderSoftwareUpdate * _Nonnull)update cancelable:(SCPCancelable * _Nullable)cancelable __attribute__((swift_name("localMobileReader(_:didStartInstallingUpdate:cancelable:)")));
         [Abstract]
         [Export("localMobileReader:didStartInstallingUpdate:cancelable:")]
-        void LocalMobileReader(SCPReader reader, SCPReaderSoftwareUpdate update, [NullAllowed] SCPCancelable cancelable);
+        void DidStartInstallingUpdate(SCPReader reader, SCPReaderSoftwareUpdate update, [NullAllowed] SCPCancelable cancelable);
 
         // @required -(void)localMobileReader:(SCPReader * _Nonnull)reader didReportReaderSoftwareUpdateProgress:(float)progress __attribute__((swift_name("localMobileReader(_:didReportReaderSoftwareUpdateProgress:)")));
         [Abstract]
         [Export("localMobileReader:didReportReaderSoftwareUpdateProgress:")]
-        void LocalMobileReader(SCPReader reader, float progress);
+        void DidReportReaderSoftwareUpdateProgress(SCPReader reader, float progress);
 
         // @required -(void)localMobileReader:(SCPReader * _Nonnull)reader didFinishInstallingUpdate:(SCPReaderSoftwareUpdate * _Nullable)update error:(NSError * _Nullable)error __attribute__((swift_name("localMobileReader(_:didFinishInstallingUpdate:error:)")));
         [Abstract]
         [Export("localMobileReader:didFinishInstallingUpdate:error:")]
-        void LocalMobileReader(SCPReader reader, [NullAllowed] SCPReaderSoftwareUpdate update, [NullAllowed] NSError error);
+        void DidFinishInstallingUpdate(SCPReader reader, [NullAllowed] SCPReaderSoftwareUpdate update, [NullAllowed] NSError error);
 
         // @required -(void)localMobileReader:(SCPReader * _Nonnull)reader didRequestReaderInput:(SCPReaderInputOptions)inputOptions __attribute__((swift_name("localMobileReader(_:didRequestReaderInput:)")));
         [Abstract]
         [Export("localMobileReader:didRequestReaderInput:")]
-        void LocalMobileReader(SCPReader reader, SCPReaderInputOptions inputOptions);
+        void DidRequestReaderInput(SCPReader reader, SCPReaderInputOptions inputOptions);
 
         // @required -(void)localMobileReader:(SCPReader * _Nonnull)reader didRequestReaderDisplayMessage:(SCPReaderDisplayMessage)displayMessage __attribute__((swift_name("localMobileReader(_:didRequestReaderDisplayMessage:)")));
         [Abstract]
         [Export("localMobileReader:didRequestReaderDisplayMessage:")]
-        void LocalMobileReader(SCPReader reader, SCPReaderDisplayMessage displayMessage);
+        void DidRequestReaderDisplayMessage(SCPReader reader, SCPReaderDisplayMessage displayMessage);
 
         // @optional -(void)localMobileReaderDidAcceptTermsOfService:(SCPReader * _Nonnull)reader __attribute__((swift_name("localMobileReaderDidAcceptTermsOfService(_:)")));
         [Export("localMobileReaderDidAcceptTermsOfService:")]
