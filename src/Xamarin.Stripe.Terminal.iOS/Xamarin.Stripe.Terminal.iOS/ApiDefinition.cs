@@ -1565,40 +1565,6 @@ namespace StripeTerminal
 		SCPCardPresentDetails InteracPresent { get; }
 	}
 
-	// @interface SCPProcessPaymentError : NSError
-	[BaseType(typeof(NSError))]
-	[DisableDefaultCtor]
-	interface SCPProcessPaymentError
-	{
-		// @property (readonly, nonatomic) SCPPaymentIntent * _Nullable paymentIntent;
-		[NullAllowed, Export("paymentIntent")]
-		SCPPaymentIntent PaymentIntent { get; }
-
-		// @property (readonly, nonatomic) NSError * _Nullable requestError;
-		[NullAllowed, Export("requestError")]
-		NSError RequestError { get; }
-
-		// @property (readonly, nonatomic) NSString * _Nullable declineCode;
-		[NullAllowed, Export("declineCode")]
-		string DeclineCode { get; }
-	}
-
-	// @interface SCPProcessRefundError : NSError
-	[BaseType(typeof(NSError))]
-	interface SCPProcessRefundError
-	{
-		// @property (readonly, nonatomic) SCPRefund * _Nullable refund;
-		[NullAllowed, Export("refund")]
-		SCPRefund Refund { get; }
-
-		// @property (readonly, nonatomic) NSError * _Nullable requestError;
-		[NullAllowed, Export("requestError")]
-		NSError RequestError { get; }
-
-		// @property (readonly, nonatomic) NSString * _Nullable failureReason;
-		[NullAllowed, Export("failureReason")]
-		string FailureReason { get; }
-	}
 
 	// @interface SCPReadReusableCardParameters : NSObject
 	[BaseType(typeof(NSObject))]
