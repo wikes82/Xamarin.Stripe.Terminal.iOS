@@ -1565,20 +1565,6 @@ namespace StripeTerminal
 		SCPCardPresentDetails InteracPresent { get; }
 	}
 
-
-	// @interface SCPReadReusableCardParameters : NSObject
-	[BaseType(typeof(NSObject))]
-	interface SCPReadReusableCardParameters
-	{
-		// @property (readwrite, copy, nonatomic) NSString * _Nullable customer;
-		[NullAllowed, Export("customer")]
-		string Customer { get; set; }
-
-		// @property (readwrite, copy, nonatomic) NSDictionary * _Nullable metadata;
-		[NullAllowed, Export("metadata", ArgumentSemantic.Copy)]
-		NSDictionary Metadata { get; set; }
-	}
-
 	// @interface SCPReader : NSObject <SCPJSONDecodable>
 	[BaseType(typeof(NSObject))]
 	[DisableDefaultCtor]
